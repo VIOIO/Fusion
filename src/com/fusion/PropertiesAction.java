@@ -11,6 +11,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+
+import java.io.File;
 
 
 public class PropertiesAction extends AnAction {
@@ -39,6 +43,7 @@ public class PropertiesAction extends AnAction {
             }
         });
         Notifications.Bus.notify(n);
+        LocalFileSystem.getInstance().refresh(true);
     }
 
 }

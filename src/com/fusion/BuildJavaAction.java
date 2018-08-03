@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.LocalFileSystem;
 
 import java.util.concurrent.*;
 
@@ -53,6 +54,7 @@ public class BuildJavaAction extends AnAction {
                 });
                 generateJava.solidityBuild();
                 Notifications.Bus.notify(n);
+                LocalFileSystem.getInstance().refresh(true);
             }
         });
 

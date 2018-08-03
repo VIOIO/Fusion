@@ -1,5 +1,8 @@
 package com.fusion.tools;
 
+
+import com.fusion.Listeners;
+
 import java.io.*;
 
 public class Tool {
@@ -20,7 +23,7 @@ public class Tool {
     }
 
 
-    public static void onAbiToJava(String path) {
+    public static void onAbiToJava(String path, Listeners listeners,int HAVEFILE) {
         try {
             Process ps = Runtime.getRuntime().exec(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
@@ -32,6 +35,9 @@ public class Tool {
             String result = sb.toString();
             System.out.println(result);
         } catch (Exception e) {
+            if (listeners!=null){
+                listeners.error(HAVEFILE);
+            }
             e.printStackTrace();
         }
     }
@@ -72,4 +78,5 @@ public class Tool {
                 .append(outputPath)
                 .append("  -p  java ").toString();
     }
+
 }

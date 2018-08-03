@@ -2,16 +2,14 @@
     <id>com.fusion</id>
     <name>fusion</name>
     <version>1.0</version>
-    <vendor email="hongyooo@icloud.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="hongyooo@icloud.com" url="https://github.com/VIOIO/Fusion">vioio</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+       solidity to java
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+        add solidity to java
     ]]>
     </change-notes>
 

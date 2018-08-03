@@ -1,6 +1,7 @@
 package com.fusion.tools;
 
 import a.a.S;
+import com.fusion.Listeners;
 
 import java.io.*;
 import java.util.Properties;
@@ -15,7 +16,7 @@ public class PropertiesStata {
     private static final String PROPERTIES = "fusion.properties";
     private static final String CAHCE_PATH = "/abi/";
 
-    public static void defaultTemplate(String path) {
+    public static void defaultTemplate(String path,Listeners templateListeners) {
         try {
             FileOutputStream out = new FileOutputStream(path + "/" + PROPERTIES);
             Properties prop = new Properties();
@@ -25,10 +26,13 @@ public class PropertiesStata {
             prop.put(ABI_PATH, path + CAHCE_PATH);
             prop.store(out, COMMENT);
             out.close();
+            templateListeners.success();
         } catch (IOException e) {
+            templateListeners.error(0);
             e.printStackTrace();
         }
     }
+
 
     public static StoreProperties getProperties(String path) {
         try {
@@ -39,7 +43,7 @@ public class PropertiesStata {
             String solidity = prop.getProperty(SOLIDITY_PATH);
             String java = prop.getProperty(JAVA_PATH);
             String abi = prop.getProperty(ABI_PATH);
-            return new StoreProperties(web3j, solidity, java,abi);
+            return new StoreProperties(web3j, solidity, java, abi);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -67,5 +71,10 @@ public class PropertiesStata {
         public String abi;
 
     }
+
+    public static String defaultTemplatePath(String path) {
+        return path + "/" + PROPERTIES;
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.fusion.make;
 
+import com.fusion.Listeners;
 import com.fusion.tools.Tool;
 
 import java.io.File;
@@ -9,12 +10,16 @@ import java.util.List;
 
 public class GenerateJava implements Generate {
 
+    public static final int NOFILE = 0x00;
+    public static final int HAVEFILE = 0x01;
+
     private static final String ABI = ".abi";
     private static final String BIN = ".bin";
     private static final String SOL = ".sol";
 
     private ArrayList<String> abiNames;
     private ArrayList<String> abiPaths;
+    private Listeners listeners;
     private String solidityPath, abiPath, javaPath, web3jPath;
 
     public GenerateJava(String solidityPath, String abiPath, String javaPath, String web3jPath) {
@@ -26,32 +31,56 @@ public class GenerateJava implements Generate {
         abiPaths = new ArrayList<>();
     }
 
-    public void build() {
-        getFileList(solidityPath);
-        for (String ss : abiNames) {
+    public void solidityBuild() {
+
+        fileList(solidityPath);
+
+        if (abiNames.size() == 0) {
+            listeners.error(NOFILE);
+            return;
+        }
+
+        if (abiPaths.size() == 0) {
+            listeners.error(NOFILE);
+            return;
+        }
+
+        for (String name : abiNames) {
             try {
-                String abi = Tool.getAbiPath(ss, abiPath);
+                String abi = Tool.getAbiPath(name, abiPath);
                 Tool.onExeCmd(abi);
-                System.out.println(abi);
             } catch (IOException e) {
                 e.printStackTrace();
+                if (listeners != null) {
+                    listeners.error(HAVEFILE);
+                }
             }
         }
-        for (String name : abiPaths) {
-            List<String> sample = getFileList1(abiPath, name.substring(0, name.length() - 4));
-            String s = Tool.getJavaPath(web3jPath, abiPath + sample.get(0), abiPath + sample.get(1), javaPath);
-            Tool.onAbiToJava(s);
+
+        for (String path : abiPaths) {
+            List<String> sample = abiList(abiPath, path.substring(0, path.length() - 4));
+            String cmd = Tool.getJavaPath(web3jPath, abiPath + sample.get(0), abiPath + sample.get(1), javaPath);
+            Tool.onAbiToJava(cmd, listeners,HAVEFILE);
         }
+
+        if (listeners != null) {
+            listeners.success();
+        }
+
     }
 
-    private void getFileList(String strPath) {
+    public void addListener(Listeners listeners) {
+        this.listeners = listeners;
+    }
+
+    private void fileList(String strPath) {
         File dir = new File(strPath);
         File[] files = dir.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 String fileName = files[i].getName();
                 if (files[i].isDirectory()) {
-                    getFileList(files[i].getAbsolutePath());
+                    fileList(files[i].getAbsolutePath());
                 } else if (fileName.endsWith(SOL)) {
                     String strFileName = files[i].getAbsolutePath();
                     abiPaths.add(files[i].getName());
@@ -63,7 +92,7 @@ public class GenerateJava implements Generate {
         }
     }
 
-    private ArrayList<String> getFileList1(String strPath, String name) {
+    private ArrayList<String> abiList(String strPath, String name) {
         ArrayList<String> arrayList = new ArrayList<>();
         File dir = new File(strPath);
         File[] files = dir.listFiles();

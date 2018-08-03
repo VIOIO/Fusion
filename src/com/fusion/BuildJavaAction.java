@@ -33,7 +33,7 @@ public class BuildJavaAction extends AnAction {
                     public void success() {
                         n = new Notification("success", null, NotificationType.INFORMATION);
                         n.setTitle(SUCCESSFULLY);
-                        n.setContent("Java saved to " + properties.abi);
+                        n.setContent("Java saved to " + properties.java);
                     }
 
                     @Override

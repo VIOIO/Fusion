@@ -33,22 +33,28 @@ public class GenerateJava implements Generate {
 
     public void solidityBuild() {
 
-        fileList(solidityPath);
-
+        findFile(solidityPath);
         if (abiNames.size() == 0) {
             listeners.error(NOFILE);
             return;
         }
-
         if (abiPaths.size() == 0) {
             listeners.error(NOFILE);
             return;
         }
+        generateAbi();
+        generateJava();
+        if (listeners != null) {
+            listeners.success();
+        }
 
+    }
+
+    private void generateAbi() {
         for (String name : abiNames) {
             try {
                 String abi = Tool.getAbiPath(name, abiPath);
-                Tool.onExeCmd(abi);
+                Tool.generateAbi(abi);
             } catch (IOException e) {
                 e.printStackTrace();
                 if (listeners != null) {
@@ -56,31 +62,28 @@ public class GenerateJava implements Generate {
                 }
             }
         }
+    }
 
+    private void generateJava() {
         for (String path : abiPaths) {
             List<String> sample = abiList(abiPath, path.substring(0, path.length() - 4));
             String cmd = Tool.getJavaPath(web3jPath, abiPath + sample.get(0), abiPath + sample.get(1), javaPath);
-            Tool.onAbiToJava(cmd, listeners, HAVEFILE);
+            Tool.generateJava(cmd, listeners, HAVEFILE);
         }
-
-        if (listeners != null) {
-            listeners.success();
-        }
-
     }
 
     public void addListener(Listeners listeners) {
         this.listeners = listeners;
     }
 
-    private void fileList(String strPath) {
+    private void findFile(String strPath) {
         File dir = new File(strPath);
         File[] files = dir.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 String fileName = files[i].getName();
                 if (files[i].isDirectory()) {
-                    fileList(files[i].getAbsolutePath());
+                    findFile(files[i].getAbsolutePath());
                 } else if (fileName.endsWith(SOL)) {
                     String strFileName = files[i].getAbsolutePath();
                     abiPaths.add(files[i].getName());

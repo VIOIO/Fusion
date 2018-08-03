@@ -16,8 +16,10 @@ import java.util.concurrent.*;
 public class BuildJavaAction extends AnAction {
 
     private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-    private static final String SUCCESSFULLY = "Solidity generate successfully to java";
-    private static final String FAIL = " Solidity generate fail to java ";
+    private static final String SUCCESSFULLY = "Solidity generate successfully to java  ";
+    private static final String FAIL = " Solidity generate fail to java  ";
+    private static final String FAIL_HAVE_CONTENT = " Must check your fusion's config,please !  ";
+    private static final String FAIL_NOHAVE_CONTENT = " your project not have solidity or abi !  ";
 
     private Notification n = null;
 
@@ -43,10 +45,10 @@ public class BuildJavaAction extends AnAction {
                         n.setTitle(FAIL);
                         switch (status) {
                             case GenerateJava.HAVEFILE:
-                                n.setContent("Must check your fusion's config,please ! ");
+                                n.setContent(FAIL_HAVE_CONTENT);
                                 break;
                             default:
-                                n.setContent("your project not have solidity or abi ! ");
+                                n.setContent(FAIL_NOHAVE_CONTENT);
                                 break;
                         }
 

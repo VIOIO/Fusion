@@ -7,7 +7,7 @@ import java.io.*;
 
 public class Tool {
 
-    public static void onExeCmd(String commandStr) throws IOException {
+    public static void generateAbi(String commandStr) throws IOException {
         Runtime run = Runtime.getRuntime();
             Process process = run.exec(commandStr);
             InputStream in = process.getInputStream();
@@ -23,7 +23,7 @@ public class Tool {
     }
 
 
-    public static void onAbiToJava(String path, Listeners listeners,int HAVEFILE) {
+    public static void generateJava(String path, Listeners listeners,int HAVEFILE) {
         try {
             Process ps = Runtime.getRuntime().exec(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));

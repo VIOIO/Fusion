@@ -4,6 +4,7 @@ import com.fusion.tools.PropertiesStata;
 import com.fusion.make.GenerateJava;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -51,6 +52,7 @@ public class BuildJavaAction extends AnAction {
                     }
                 });
                 generateJava.solidityBuild();
+                Notifications.Bus.notify(n);
             }
         });
 

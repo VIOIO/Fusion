@@ -60,7 +60,7 @@ public class GenerateJava implements Generate {
         for (String path : abiPaths) {
             List<String> sample = abiList(abiPath, path.substring(0, path.length() - 4));
             String cmd = Tool.getJavaPath(web3jPath, abiPath + sample.get(0), abiPath + sample.get(1), javaPath);
-            Tool.onAbiToJava(cmd, listeners,HAVEFILE);
+            Tool.onAbiToJava(cmd, listeners, HAVEFILE);
         }
 
         if (listeners != null) {
